@@ -1,16 +1,16 @@
 package entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class KpopGroup {
-    private int groupId;
+    private Long groupId;
     private String groupName;
-    private Date dataStartContract;
-    private Date dataEndContract;
+    private LocalDate dataStartContract;
+    private LocalDate dataEndContract;
     private String managerName;
-    private int agencyIdFk;
+    private Long agencyIdFk;
 
-    public KpopGroup(int groupId, String groupName, Date dataStartContract, Date dataEndContract, String managerName, int agencyIdFk) {
+    public KpopGroup(Long groupId, String groupName, LocalDate dataStartContract, LocalDate dataEndContract, String managerName, Long agencyIdFk) {
         this.groupId = groupId;
         this.groupName = groupName;
         this.dataStartContract = dataStartContract;
@@ -19,11 +19,11 @@ public class KpopGroup {
         this.agencyIdFk = agencyIdFk;
     }
 
-    public int getGroupId() {
+    public Long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(int groupId) {
+    public void setGroupId(Long groupId) {
         this.groupId = groupId;
     }
 
@@ -35,19 +35,19 @@ public class KpopGroup {
         this.groupName = groupName;
     }
 
-    public Date getDataStartContract() {
+    public LocalDate getDataStartContract() {
         return dataStartContract;
     }
 
-    public void setDataStartContract(Date dataStartContract) {
+    public void setDataStartContract(LocalDate dataStartContract) {
         this.dataStartContract = dataStartContract;
     }
 
-    public Date getDataEndContract() {
+    public LocalDate getDataEndContract() {
         return dataEndContract;
     }
 
-    public void setDataEndContract(Date dataEndContract) {
+    public void setDataEndContract(LocalDate dataEndContract) {
         this.dataEndContract = dataEndContract;
     }
 
@@ -59,11 +59,11 @@ public class KpopGroup {
         this.managerName = managerName;
     }
 
-    public int getAgencyIdFk() {
+    public Long getAgencyIdFk() {
         return agencyIdFk;
     }
 
-    public void setAgencyIdFk(int agencyIdFk) {
+    public void setAgencyIdFk(Long agencyIdFk) {
         this.agencyIdFk = agencyIdFk;
     }
 

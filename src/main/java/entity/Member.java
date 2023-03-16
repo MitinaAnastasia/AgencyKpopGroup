@@ -1,18 +1,18 @@
 package entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class Member {
-    private int memberId;
+    private Long memberId;
     private String name;
     private String surname;
     private String nickname;
     private String telephoneNumber;
-    private Date birth;
+    private LocalDate birth;
     private String position;
-    private int groupIdFk;
+    private Long groupIdFk;
 
-    public Member(int memberId, String name, String surname, String nickname, String telephoneNumber, Date birth, String position, int groupIdFk) {
+    public Member(Long memberId, String name, String surname, String nickname, String telephoneNumber, LocalDate birth, String position, Long groupIdFk) {
         this.memberId = memberId;
         this.name = name;
         this.surname = surname;
@@ -23,11 +23,11 @@ public class Member {
         this.groupIdFk = groupIdFk;
     }
 
-    public int getMemberId() {
+    public Long getMemberId() {
         return memberId;
     }
 
-    public void setMemberId(int memberId) {
+    public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
 
@@ -63,11 +63,11 @@ public class Member {
         this.telephoneNumber = telephoneNumber;
     }
 
-    public Date getBirth() {
+    public LocalDate getBirth() {
         return birth;
     }
 
-    public void setBirth(Date birth) {
+    public void setBirth(LocalDate birth) {
         this.birth = birth;
     }
 
@@ -79,11 +79,11 @@ public class Member {
         this.position = position;
     }
 
-    public int getGroupIdFk() {
+    public Long getGroupIdFk() {
         return groupIdFk;
     }
 
-    public void setGroupIdFk(int groupIdFk) {
+    public void setGroupIdFk(Long groupIdFk) {
         this.groupIdFk = groupIdFk;
     }
 

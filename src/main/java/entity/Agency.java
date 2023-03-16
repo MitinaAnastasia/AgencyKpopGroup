@@ -1,13 +1,13 @@
 package entity;
 
 public class Agency {
-    private int agencyId;
+    private Long agencyId;
     private String agencyName;
     private String directorName;
     private String telephoneNumber;
     private String address;
 
-    public Agency(int agencyId, String agencyName, String directorName, String telephoneNumber, String address) {
+    public Agency(Long agencyId, String agencyName, String directorName, String telephoneNumber, String address) {
         this.agencyId = agencyId;
         this.agencyName = agencyName;
         this.directorName = directorName;
@@ -15,7 +15,7 @@ public class Agency {
         this.address = address;
     }
 
-    public int getAgencyId() {
+    public Long getAgencyId() {
         return agencyId;
     }
 
@@ -35,7 +35,7 @@ public class Agency {
         return address;
     }
 
-    public void setAgencyId(int agencyId) {
+    public void setAgencyId(Long agencyId) {
         this.agencyId = agencyId;
     }
 

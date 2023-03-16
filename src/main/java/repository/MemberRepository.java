@@ -3,21 +3,18 @@ package repository;
 import connect.ConnectionFactory;
 import entity.Member;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class MemberRepository {
-    private static final ConnectionFactory connectionFactory = new ConnectionFactory();
+    private final ConnectionFactory connectionFactory = new ConnectionFactory();
 
-    public static Member get(int memberId) {
+    public Member get(Long memberId) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("select * from \"Member\" where \"memberId\" = ?");
-            statement.setInt(1, memberId);
+            statement.setLong(1, memberId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return getMember(resultSet);
+                return findMember(resultSet);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -25,20 +22,20 @@ public class MemberRepository {
         return null;
     }
 
-    private static Member getMember(ResultSet resultSet) throws SQLException {
+    private Member findMember(ResultSet resultSet) throws SQLException {
         return new Member(
-                resultSet.getInt("memberId"),
+                resultSet.getLong("memberId"),
                 resultSet.getString("name"),
                 resultSet.getString("surname"),
                 resultSet.getString("nickname"),
                 resultSet.getString("telephoneNumber"),
-                resultSet.getDate("birth"),
+                resultSet.getDate("birth").toLocalDate(),
                 resultSet.getString("position"),
-                resultSet.getInt("groupIdFk")
+                resultSet.getLong("groupIdFk")
         );
     }
 
-    public static String update(Member member) {
+    public String update(Member member) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("update \"Member\" set \"name\" = ?," +
                     "\"surname\" = ?, \"nickname\" = ?, \"telephoneNumber\" = ?, \"birth\" = ?, \"position\" = ?, \"groupIdFk\" = ? where \"memberId\" = ?");
@@ -46,10 +43,10 @@ public class MemberRepository {
             statement.setString(2, member.getSurname());
             statement.setString(3, member.getNickname());
             statement.setString(4, member.getTelephoneNumber());
-            statement.setDate(5, member.getBirth());
+            statement.setDate(5, Date.valueOf(member.getBirth()));
             statement.setString(6, member.getPosition());
-            statement.setInt(7, member.getGroupIdFk());
-            statement.setInt(8, member.getMemberId());
+            statement.setLong(7, member.getGroupIdFk());
+            statement.setLong(8, member.getMemberId());
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
                 return "Update success";
@@ -60,18 +57,18 @@ public class MemberRepository {
         return "";
     }
 
-    public static String insert(Member member) {
+    public String insert(Member member) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("insert into \"Member\" (\"memberId\",\"name\"," +
                     "\"surname\", \"nickname\", \"telephoneNumber\", \"birth\", \"position\", \"groupIdFk\") values (?, ?, ?, ?, ?, ?, ?, ?)");
-            statement.setInt(1, member.getMemberId());
+            statement.setLong(1, member.getMemberId());
             statement.setString(2, member.getName());
             statement.setString(3, member.getSurname());
             statement.setString(4, member.getNickname());
             statement.setString(5, member.getTelephoneNumber());
-            statement.setDate(6, member.getBirth());
+            statement.setDate(6, Date.valueOf(member.getBirth()));
             statement.setString(7, member.getPosition());
-            statement.setInt(8, member.getGroupIdFk());
+            statement.setLong(8, member.getGroupIdFk());
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
                 return "Insert success";
@@ -82,10 +79,10 @@ public class MemberRepository {
         return "";
     }
 
-    public static String delete(int memberId) {
+    public String delete(Long memberId) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("delete from \"Member\" where \"memberId\" = ?");
-            statement.setInt(1, memberId);
+            statement.setLong(1, memberId);
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
                 return "Delete success";

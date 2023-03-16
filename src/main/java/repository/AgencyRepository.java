@@ -12,13 +12,13 @@ public class AgencyRepository {
 
     private static final ConnectionFactory connectionFactory = new ConnectionFactory();
 
-    public static Agency get(int agencyId) {
+    public Agency get(Long agencyId) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("select * from \"Agency\" where \"agencyId\" = ?");
-            statement.setInt(1, agencyId);
+            statement.setLong(1, agencyId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return getAgency(resultSet);
+                return findAgency(resultSet);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -26,9 +26,9 @@ public class AgencyRepository {
         return null;
     }
 
-    private static Agency getAgency(ResultSet resultSet) throws SQLException {
+    private Agency findAgency(ResultSet resultSet) throws SQLException {
         return new Agency(
-                resultSet.getInt("agencyId"),
+                resultSet.getLong("agencyId"),
                 resultSet.getString("agencyName"),
                 resultSet.getString("directorName"),
                 resultSet.getString("telephoneNumber"),
@@ -36,7 +36,7 @@ public class AgencyRepository {
         );
     }
 
-    public static String update(Agency agency) {
+    public String update(Agency agency) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("update \"Agency\" set \"agencyName\" = ?," +
                     "\"directorName\" = ?, \"address\" = ?, \"telephoneNumber\" = ? where \"agencyId\" = ?");
@@ -44,7 +44,7 @@ public class AgencyRepository {
             statement.setString(2, agency.getDirectorName());
             statement.setString(3, agency.getAddress());
             statement.setString(4, agency.getTelephoneNumber());
-            statement.setInt(5, agency.getAgencyId());
+            statement.setLong(5, agency.getAgencyId());
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
                 return "Update success";
@@ -55,11 +55,11 @@ public class AgencyRepository {
         return "";
     }
 
-    public static String insert(Agency agency) {
+    public String insert(Agency agency) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("insert into \"Agency\" (\"agencyId\",\"agencyName\"," +
                     "\"directorName\", \"address\", \"telephoneNumber\") values (?, ?, ?, ?, ?)");
-            statement.setInt(1, agency.getAgencyId());
+            statement.setLong(1, agency.getAgencyId());
             statement.setString(2, agency.getAgencyName());
             statement.setString(3, agency.getDirectorName());
             statement.setString(4, agency.getAddress());
@@ -74,10 +74,10 @@ public class AgencyRepository {
         return "";
     }
 
-    public static String delete(int agencyId) {
+    public String delete(Long agencyId) {
         try (Connection connection = connectionFactory.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("delete from \"Agency\" where \"agencyId\" = ?");
-            statement.setInt(1, agencyId);
+            statement.setLong(1, agencyId);
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
                 return "Delete success";
