@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgencyRepository {
 
@@ -34,6 +36,20 @@ public class AgencyRepository {
                 resultSet.getString("telephoneNumber"),
                 resultSet.getString("address")
         );
+    }
+
+    public List<Agency> getAll() {
+        List<Agency> agencies = new ArrayList<>();
+        try (Connection connection = connectionFactory.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("select * from \"Agency\"");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                agencies.add(findAgency(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return agencies;
     }
 
     public String update(Agency agency) {

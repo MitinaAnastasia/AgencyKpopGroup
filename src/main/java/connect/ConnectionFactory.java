@@ -15,7 +15,7 @@ public class ConnectionFactory {
 
     public ConnectionFactory() {
         try {
-            var fis = new FileInputStream("src/main/resources/config.properties");
+            var fis = new FileInputStream("C:\\Users\\username\\IdeaProjects\\AgencyKpopGroup1\\src\\main\\resources\\config.properties");
             Properties property = new Properties();
             property.load(fis);
 
