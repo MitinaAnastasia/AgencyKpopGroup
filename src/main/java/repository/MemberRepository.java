@@ -4,6 +4,8 @@ import connect.ConnectionFactory;
 import entity.Member;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberRepository {
     private final ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -33,6 +35,20 @@ public class MemberRepository {
                 resultSet.getString("position"),
                 resultSet.getLong("groupIdFk")
         );
+    }
+
+    public List<Member> getAll() {
+        List<Member> members = new ArrayList<>();
+        try (Connection connection = connectionFactory.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("select * from \"Member\"");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                members.add(findMember(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return members;
     }
 
     public String update(Member member) {

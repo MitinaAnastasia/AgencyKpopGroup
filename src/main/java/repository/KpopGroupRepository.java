@@ -4,6 +4,8 @@ import connect.ConnectionFactory;
 import entity.KpopGroup;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class KpopGroupRepository {
     private static final ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -31,6 +33,20 @@ public class KpopGroupRepository {
                 resultSet.getString("managerName"),
                 resultSet.getLong("agencyIdFk")
         );
+    }
+
+    public List<KpopGroup> getAll() {
+        List<KpopGroup> kpopGroups = new ArrayList<>();
+        try (Connection connection = connectionFactory.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement("select * from \"KpopGroup\"");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                kpopGroups.add(findGroup(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return kpopGroups;
     }
 
     public String update(KpopGroup group) {
