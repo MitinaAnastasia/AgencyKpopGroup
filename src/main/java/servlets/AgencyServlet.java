@@ -51,7 +51,6 @@ public class AgencyServlet extends HttpServlet {
                 listAgency(req, resp);
                 break;
         }
-
     }
 
     private void listAgency(HttpServletRequest req, HttpServletResponse resp)
