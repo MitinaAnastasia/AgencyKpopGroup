@@ -53,24 +53,30 @@ public class KpopGroupRepository {
         return "";
     }
 
-    public String insert(KpopGroup group) {
+    public Long insert(KpopGroup group) {
+        long groupId = 0L;
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("insert into \"KpopGroup\" (\"groupId\",\"groupName\"," +
-                    "\"dataStartContract\", \"dataEndContract\", \"managerName\", \"agencyIdFk\") values (?, ?, ?, ?, ?, ?)");
-            statement.setLong(1, group.getGroupId());
-            statement.setString(2, group.getGroupName());
-            statement.setDate(3, Date.valueOf(group.getDataStartContract()));
-            statement.setDate(4, Date.valueOf(group.getDataEndContract()));
-            statement.setString(5, group.getManagerName());
-            statement.setLong(6, group.getAgencyIdFk());
+            PreparedStatement statement = connection.prepareStatement("insert into \"KpopGroup\" (\"groupName\"," +
+                    "\"dataStartContract\", \"dataEndContract\", \"managerName\", \"agencyIdFk\") values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, group.getGroupName());
+            statement.setDate(2, Date.valueOf(group.getDataStartContract()));
+            statement.setDate(3, Date.valueOf(group.getDataEndContract()));
+            statement.setString(4, group.getManagerName());
+            statement.setLong(5, group.getAgencyIdFk());
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
-                return "Insert success";
+                try (ResultSet rs = statement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        groupId = rs.getLong(1);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return "";
+        return groupId;
     }
 
     public String delete(Long groupId) {

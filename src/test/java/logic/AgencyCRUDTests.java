@@ -1,6 +1,7 @@
 package logic;
 
 import data.KpopAgencyTestsData;
+import entity.Agency;
 import org.junit.jupiter.api.Test;
 import repository.AgencyRepository;
 
@@ -13,50 +14,52 @@ public class AgencyCRUDTests {
 
     @Test
     public void AgencyGetIdTest() {
+        Long id = agencyRepository.insert(KpopAgencyTestsData.SUNNY);
+        KpopAgencyTestsData.SUNNY.setAgencyId(id);
         //given
-        String expectedSelectQuery = "entity.Agency{agencyId=2, agencyName='sunny', directorName='Пак Хён Сок', telephoneNumber='+82 (630) 12 43 345', address='Каннам-гу, Сеул, Корея'}";
-        agencyRepository.insert(KpopAgencyTestsData.SUNNY);
+        String expectedSelectQuery = KpopAgencyTestsData.SUNNY.toString();
         //when
-        String actualSelectQuery = Objects.requireNonNull(agencyRepository.get(KpopAgencyTestsData.SUNNY_ID)).toString();
+        String actualSelectQuery = Objects.requireNonNull(agencyRepository.get(id).toString());
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);
-        agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        agencyRepository.delete(id);
     }
 
     @Test
     public void AgencyInsertIdTest() {
-        //given
-        String expectedSelectQuery = "Insert success";
-
         //when
-        String actualSelectQuery = agencyRepository.insert(KpopAgencyTestsData.SUNNY);
+        Long actualSelectQuery = agencyRepository.insert(KpopAgencyTestsData.SUNNY);
+        Agency agency = agencyRepository.get(actualSelectQuery);
+        Long id = agency.getAgencyId();
+        //given
+        Long expectedSelectQuery = id;
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);
-        agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        agencyRepository.delete(id);
     }
 
     @Test
     public void AgencyUpdateIdTest() {
         //given
         String expectedSelectQuery = "Update success";
-        agencyRepository.insert(KpopAgencyTestsData.SUNNY);
+        Agency agency = agencyRepository.get(agencyRepository.insert(KpopAgencyTestsData.SUNNY));
         //when
-        String actualSelectQuery = agencyRepository.update(KpopAgencyTestsData.SUNNY);
+        String actualSelectQuery = agencyRepository.update(agency);
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);
-        agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        agencyRepository.delete(agency.getAgencyId());
     }
 
     @Test
     public void AgencyDeleteIdTest() {
         //given
         String expectedSelectQuery = "Delete success";
-        agencyRepository.insert(KpopAgencyTestsData.SUNNY);
+        Agency agency = agencyRepository.get(agencyRepository.insert(KpopAgencyTestsData.SUNNY));
         //when
-        String actualSelectQuery = agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        String actualSelectQuery = agencyRepository.delete(agency.getAgencyId());
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);

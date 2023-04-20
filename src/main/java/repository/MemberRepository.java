@@ -57,26 +57,32 @@ public class MemberRepository {
         return "";
     }
 
-    public String insert(Member member) {
+    public Long insert(Member member) {
+        long memberId = 0L;
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("insert into \"Member\" (\"memberId\",\"name\"," +
-                    "\"surname\", \"nickname\", \"telephoneNumber\", \"birth\", \"position\", \"groupIdFk\") values (?, ?, ?, ?, ?, ?, ?, ?)");
-            statement.setLong(1, member.getMemberId());
-            statement.setString(2, member.getName());
-            statement.setString(3, member.getSurname());
-            statement.setString(4, member.getNickname());
-            statement.setString(5, member.getTelephoneNumber());
-            statement.setDate(6, Date.valueOf(member.getBirth()));
-            statement.setString(7, member.getPosition());
-            statement.setLong(8, member.getGroupIdFk());
+            PreparedStatement statement = connection.prepareStatement("insert into \"Member\" (\"name\"," +
+                    "\"surname\", \"nickname\", \"telephoneNumber\", \"birth\", \"position\", \"groupIdFk\") values (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, member.getName());
+            statement.setString(2, member.getSurname());
+            statement.setString(3, member.getNickname());
+            statement.setString(4, member.getTelephoneNumber());
+            statement.setDate(5, Date.valueOf(member.getBirth()));
+            statement.setString(6, member.getPosition());
+            statement.setLong(7, member.getGroupIdFk());
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
-                return "Insert success";
+                try (ResultSet rs = statement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        memberId = rs.getLong(1);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return "";
+        return memberId;
     }
 
     public String delete(Long memberId) {

@@ -3,10 +3,7 @@ package repository;
 import connect.ConnectionFactory;
 import entity.Agency;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,23 +68,29 @@ public class AgencyRepository {
         return "";
     }
 
-    public String insert(Agency agency) {
+    public Long insert(Agency agency) {
+        long agencyId = 0L;
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("insert into \"Agency\" (\"agencyId\",\"agencyName\"," +
-                    "\"directorName\", \"address\", \"telephoneNumber\") values (?, ?, ?, ?, ?)");
-            statement.setLong(1, agency.getAgencyId());
-            statement.setString(2, agency.getAgencyName());
-            statement.setString(3, agency.getDirectorName());
-            statement.setString(4, agency.getAddress());
-            statement.setString(5, agency.getTelephoneNumber());
+            PreparedStatement statement = connection.prepareStatement("insert into \"Agency\" (\"agencyName\"," +
+                    "\"directorName\", \"address\", \"telephoneNumber\") values (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, agency.getAgencyName());
+            statement.setString(2, agency.getDirectorName());
+            statement.setString(3, agency.getAddress());
+            statement.setString(4, agency.getTelephoneNumber());
             int countRows = statement.executeUpdate();
             if (countRows > 0) {
-                return "Insert success";
+                try (ResultSet rs = statement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        agencyId = rs.getLong(1);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return "";
+        return agencyId;
     }
 
     public String delete(Long agencyId) {

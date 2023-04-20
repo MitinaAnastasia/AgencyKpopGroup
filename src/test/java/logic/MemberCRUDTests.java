@@ -1,6 +1,9 @@
 package logic;
 
 import data.KpopAgencyTestsData;
+import entity.Agency;
+import entity.KpopGroup;
+import entity.Member;
 import org.junit.jupiter.api.Test;
 import repository.AgencyRepository;
 import repository.KpopGroupRepository;
@@ -18,68 +21,79 @@ public class MemberCRUDTests {
     @Test
     public void MemberGetIdTest() {
         //given
-        String expectedSelectQuery = "entity.Member{memberId=2, name='Пак', surname='Хосок', nickname='Felix', telephoneNumber='+82(302) 12 32 134', birth=2001-02-18, position='рэп', groupIdFk=2}";
-        agencyRepository.insert(KpopAgencyTestsData.SUNNY);
-        kpopGroupRepository.insert(KpopAgencyTestsData.TXT);
-        memberRepository.insert(KpopAgencyTestsData.FELIX);
+        Long agencyId = agencyRepository.insert(KpopAgencyTestsData.SUNNY);
+        KpopAgencyTestsData.TXT.setAgencyIdFk(agencyId);
+        Long groupId = kpopGroupRepository.insert(KpopAgencyTestsData.TXT);
+        KpopAgencyTestsData.FELIX.setGroupIdFk(groupId);
+        Long memberId = memberRepository.insert(KpopAgencyTestsData.FELIX);
+        KpopAgencyTestsData.FELIX.setMemberId(memberId);
+        String expectedSelectQuery = KpopAgencyTestsData.FELIX.toString();
         //when
-        String actualSelectQuery = Objects.requireNonNull(memberRepository.get(KpopAgencyTestsData.FELIX_ID)).toString();
+        String actualSelectQuery = Objects.requireNonNull(memberRepository.get(memberId).toString());
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);
-        memberRepository.delete(KpopAgencyTestsData.FELIX_ID);
-        kpopGroupRepository.delete(KpopAgencyTestsData.TXT_ID);
-        agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        memberRepository.delete(memberId);
+        kpopGroupRepository.delete(groupId);
+        agencyRepository.delete(agencyId);
     }
 
     @Test
     public void MemberInsertIdTest() {
-        //given
-        String expectedSelectQuery = "Insert success";
-        agencyRepository.insert(KpopAgencyTestsData.SUNNY);
-        kpopGroupRepository.insert(KpopAgencyTestsData.TXT);
+        Agency agency = agencyRepository.get(agencyRepository.insert(KpopAgencyTestsData.SUNNY));
+        KpopAgencyTestsData.TXT.setAgencyIdFk(agency.getAgencyId());
+        KpopGroup kpopGroup = kpopGroupRepository.get(kpopGroupRepository.insert(KpopAgencyTestsData.TXT));
+        KpopAgencyTestsData.FELIX.setGroupIdFk(kpopGroup.getGroupId());
         //when
-        String actualSelectQuery = memberRepository.insert(KpopAgencyTestsData.FELIX);
+        Long actualSelectQuery = memberRepository.insert(KpopAgencyTestsData.FELIX);
+        Member member = memberRepository.get(actualSelectQuery);
+        Long id = member.getMemberId();
+        //given
+        Long expectedSelectQuery = id;
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);
-        memberRepository.delete(KpopAgencyTestsData.FELIX_ID);
-        kpopGroupRepository.delete(KpopAgencyTestsData.TXT_ID);
-        agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        memberRepository.delete(id);
+        kpopGroupRepository.delete(kpopGroup.getGroupId());
+        agencyRepository.delete(agency.getAgencyId());
     }
 
     @Test
     public void MemberUpdateIdTest() {
         //given
         String expectedSelectQuery = "Update success";
-        agencyRepository.insert(KpopAgencyTestsData.SUNNY);
-        kpopGroupRepository.insert(KpopAgencyTestsData.TXT);
-        memberRepository.insert(KpopAgencyTestsData.FELIX);
+        Agency agency = agencyRepository.get(agencyRepository.insert(KpopAgencyTestsData.SUNNY));
+        KpopAgencyTestsData.TXT.setAgencyIdFk(agency.getAgencyId());
+        KpopGroup kpopGroup = kpopGroupRepository.get(kpopGroupRepository.insert(KpopAgencyTestsData.TXT));
+        KpopAgencyTestsData.FELIX.setGroupIdFk(kpopGroup.getGroupId());
+        Member member = memberRepository.get(memberRepository.insert(KpopAgencyTestsData.FELIX));
 
         //when
-        String actualSelectQuery = memberRepository.update(KpopAgencyTestsData.FELIX);
+        String actualSelectQuery = memberRepository.update(member);
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);
-        memberRepository.delete(KpopAgencyTestsData.FELIX_ID);
-        kpopGroupRepository.delete(KpopAgencyTestsData.TXT_ID);
-        agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        memberRepository.delete(member.getMemberId());
+        kpopGroupRepository.delete(kpopGroup.getGroupId());
+        agencyRepository.delete(agency.getAgencyId());
     }
 
     @Test
     public void MemberDeleteIdTest() {
         //given
         String expectedSelectQuery = "Delete success";
-        agencyRepository.insert(KpopAgencyTestsData.SUNNY);
-        kpopGroupRepository.insert(KpopAgencyTestsData.TXT);
-        memberRepository.insert(KpopAgencyTestsData.FELIX);
+        Agency agency = agencyRepository.get(agencyRepository.insert(KpopAgencyTestsData.SUNNY));
+        KpopAgencyTestsData.TXT.setAgencyIdFk(agency.getAgencyId());
+        KpopGroup kpopGroup = kpopGroupRepository.get(kpopGroupRepository.insert(KpopAgencyTestsData.TXT));
+        KpopAgencyTestsData.FELIX.setGroupIdFk(kpopGroup.getGroupId());
+        Member member = memberRepository.get(memberRepository.insert(KpopAgencyTestsData.FELIX));
 
         //when
-        String actualSelectQuery = memberRepository.delete(KpopAgencyTestsData.FELIX_ID);
+        String actualSelectQuery = memberRepository.delete(member.getMemberId());
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);
-        kpopGroupRepository.delete(KpopAgencyTestsData.TXT_ID);
-        agencyRepository.delete(KpopAgencyTestsData.SUNNY_ID);
+        kpopGroupRepository.delete(kpopGroup.getGroupId());
+        agencyRepository.delete(agency.getAgencyId());
     }
 }
