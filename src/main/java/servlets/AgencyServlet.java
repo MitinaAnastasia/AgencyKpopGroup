@@ -80,7 +80,7 @@ public class AgencyServlet extends HttpServlet {
 
     private void insertAgency(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
-        agencyRepository.insert(parameter(req));
+        agencyRepository.insert(parameterWithoutId(req));
         resp.sendRedirect("list");
     }
 
@@ -104,6 +104,14 @@ public class AgencyServlet extends HttpServlet {
         String telephoneNumber = req.getParameter("telephoneNumber");
         String address = req.getParameter("address");
         return new Agency(agencyId, agencyName, directorName, telephoneNumber, address);
+    }
+
+    private Agency parameterWithoutId(HttpServletRequest req) {
+        String agencyName = req.getParameter("agencyName");
+        String directorName = req.getParameter("directorName");
+        String telephoneNumber = req.getParameter("telephoneNumber");
+        String address = req.getParameter("address");
+        return new Agency(null, agencyName, directorName, telephoneNumber, address);
     }
 }
 
