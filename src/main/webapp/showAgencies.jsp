@@ -24,7 +24,7 @@
 </div>
 <div align="center">
     <table border="1" cellpadding="5">
-        <caption><h2>List of Books</h2></caption>
+        <caption><h2>List of Agencies</h2></caption>
         <tr>
             <td>ID</td>
             <td>Название</td>
@@ -42,8 +42,10 @@
                 <td><c:out value="${agency.getAddress()}"/></td>
                 <td>
                     <a href="${pageContext.request.contextPath}/edit?id=<c:out value='${agency.getAgencyId()}' />">Edit</a>
-                    &nbsp;&nbsp;&nbsp;&nbsp; <a
+                    &nbsp;&nbsp; <a
                         href="${pageContext.request.contextPath}/delete?id=<c:out value='${agency.getAgencyId()}' />">Delete</a>
+                    &nbsp;&nbsp; <a
+                        href="${pageContext.request.contextPath}/group?id=<c:out value='${agency.getAgencyId()}' />">Groups</a>
                 </td>
             </tr>
         </c:forEach>
