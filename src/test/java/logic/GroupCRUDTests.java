@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import repository.AgencyRepository;
 import repository.KpopGroupRepository;
 
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -25,7 +23,7 @@ public class GroupCRUDTests {
         KpopAgencyTestsData.TXT.setGroupId(groupId);
         String expectedSelectQuery = KpopAgencyTestsData.TXT.toString();
         //when
-        String actualSelectQuery = Objects.requireNonNull(kpopGroupRepository.get(groupId).toString());
+        String actualSelectQuery = kpopGroupRepository.get(groupId).toString();
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);

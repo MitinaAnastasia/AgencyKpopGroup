@@ -5,8 +5,6 @@ import entity.Agency;
 import org.junit.jupiter.api.Test;
 import repository.AgencyRepository;
 
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AgencyCRUDTests {
@@ -19,7 +17,7 @@ public class AgencyCRUDTests {
         //given
         String expectedSelectQuery = KpopAgencyTestsData.SUNNY.toString();
         //when
-        String actualSelectQuery = Objects.requireNonNull(agencyRepository.get(id).toString());
+        String actualSelectQuery = agencyRepository.get(id).toString();
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);

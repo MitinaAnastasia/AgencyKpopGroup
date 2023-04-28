@@ -9,8 +9,6 @@ import repository.AgencyRepository;
 import repository.KpopGroupRepository;
 import repository.MemberRepository;
 
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MemberCRUDTests {
@@ -29,7 +27,7 @@ public class MemberCRUDTests {
         KpopAgencyTestsData.FELIX.setMemberId(memberId);
         String expectedSelectQuery = KpopAgencyTestsData.FELIX.toString();
         //when
-        String actualSelectQuery = Objects.requireNonNull(memberRepository.get(memberId).toString());
+        String actualSelectQuery = memberRepository.get(memberId).toString();
 
         //then
         assertEquals(expectedSelectQuery, actualSelectQuery);

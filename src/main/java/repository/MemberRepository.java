@@ -12,7 +12,7 @@ public class MemberRepository {
 
     public Member get(Long memberId) {
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select * from \"Member\" where \"memberId\" = ?");
+            PreparedStatement statement = connection.prepareStatement("select \"memberId\", \"name\", \"surname\", \"nickname\", \"telephoneNumber\", \"birth\", \"position\", \"groupIdFk\" from \"Member\" where \"memberId\" = ?");
             statement.setLong(1, memberId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -40,7 +40,7 @@ public class MemberRepository {
     public List<Member> getAll() {
         List<Member> members = new ArrayList<>();
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select * from \"Member\"");
+            PreparedStatement statement = connection.prepareStatement("select \"memberId\", \"name\", \"surname\", \"nickname\", \"telephoneNumber\", \"birth\", \"position\", \"groupIdFk\" from \"Member\"");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 members.add(findMember(resultSet));

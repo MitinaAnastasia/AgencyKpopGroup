@@ -12,7 +12,7 @@ public class KpopGroupRepository {
 
     public KpopGroup get(Long groupId) {
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select * from \"KpopGroup\" where \"groupId\" = ?");
+            PreparedStatement statement = connection.prepareStatement("select \"groupId\", \"groupName\", \"dataStartContract\", \"dataEndContract\", \"managerName\", \"agencyIdFk\" from \"KpopGroup\" where \"groupId\" = ?");
             statement.setLong(1, groupId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -38,7 +38,7 @@ public class KpopGroupRepository {
     public List<KpopGroup> getAllById(Long agencyIdFk) {
         List<KpopGroup> kpopGroups = new ArrayList<>();
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select * from \"KpopGroup\" where \"agencyIdFk\" = ?");
+            PreparedStatement statement = connection.prepareStatement("select \"groupId\", \"groupName\", \"dataStartContract\", \"dataEndContract\", \"managerName\", \"agencyIdFk\" from \"KpopGroup\" where \"agencyIdFk\" = ?");
             statement.setLong(1, agencyIdFk);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {

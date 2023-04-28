@@ -13,7 +13,7 @@ public class AgencyRepository {
 
     public Agency get(Long agencyId) {
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select * from \"Agency\" where \"agencyId\" = ?");
+            PreparedStatement statement = connection.prepareStatement("select \"agencyId\", \"agencyName\", \"directorName\", \"address\", \"telephoneNumber\" from \"Agency\" where \"agencyId\" = ?");
             statement.setLong(1, agencyId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -38,7 +38,7 @@ public class AgencyRepository {
     public List<Agency> getAll() {
         List<Agency> agencies = new ArrayList<>();
         try (Connection connection = connectionFactory.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("select * from \"Agency\"");
+            PreparedStatement statement = connection.prepareStatement("select \"agencyId\", \"agencyName\", \"directorName\", \"address\", \"telephoneNumber\" from \"Agency\"");
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 agencies.add(findAgency(resultSet));
